@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mera Dil 🐱💕</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:black;
+  font-family:Arial, sans-serif;
+  overflow:hidden;
+}
+
+/* 🔐 LOCK SCREEN */
+.lock{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at top,#000,#130008,#000);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  color:#ff2f6d;
+  z-index:10;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%{background-color:#000;}
+  50%{background-color:#12000a;}
+  100%{background-color:#000;}
+}
+.lock h1{
+  font-size:34px;
+  margin-bottom:10px;
+  text-shadow:0 0 12px red;
+}
+.lock p{
+  color:#bbb;
+  margin-bottom:20px;
+}
+.lock input{
+  padding:14px;
+  font-size:20px;
+  width:180px;
+  text-align:center;
+  border-radius:10px;
+  border:none;
+  outline:none;
+}
+.lock button{
+  margin-top:15px;
+  padding:12px 30px;
+  border:none;
+  border-radius:25px;
+  background:#ff2f6d;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+.shake{
+  animation:shake 0.3s;
+}
+@keyframes shake{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-5px)}
+  50%{transform:translateX(5px)}
+  75%{transform:translateX(-5px)}
+  100%{transform:translateX(0)}
+}
+
+/* CARD */
+.card{
+  background:white;
+  padding:22px;
+  border-radius:22px;
+  width:90%;
+  max-width:420px;
+  text-align:center;
+  box-shadow:0 15px 35px rgba(0,0,0,0.25);
+  display:none;
+}
+h1{ color:#ff2f6d; }
+p{
+  font-size:18px;
+  line-height:1.8;
+  color:#333;
+  min-height:90px;
+}
+.credit{
+  font-size:12px;
+  color:#ff2f6d;
+  margin-top:5px;
+  font-weight:bold;
+}
+img{
+  width:100%;
+  border-radius:18px;
+  margin:15px 0;
+  transition:opacity 0.6s ease;
+}
+button{
+  background:#ff2f6d;
+  color:white;
+  border:none;
+  padding:12px 26px;
+  font-size:16px;
+  border-radius:30px;
+  cursor:pointer;
+  margin:6px;
+}
+.watermark{
+  position:fixed;
+  bottom:8px;
+  right:10px;
+  font-size:13px;
+  color:rgba(255,255,255,0.4);
+  font-weight:bold;
+}
+
+/* SURPRISE */
+.surprise{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle,#ff5f9e,#12000a);
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  z-index:5;
+}
+.surprise h1{
+  font-size:32px;
+  color:white;
+}
+.surprise p{
+  font-size:20px;
+  color:white;
+  max-width:85%;
+  line-height:1.9;
+}
+.heart{
+  position:absolute;
+  color:white;
+  font-size:22px;
+  animation:float 6s linear infinite;
+}
+@keyframes float{
+  from{ transform:translateY(100vh); opacity:1; }
+  to{ transform:translateY(-120vh); opacity:0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="watermark">🖤 Made by Mukaddis Hussain</div>
+
+<!-- 🔐 LOCK SCREEN -->
+<div class="lock" id="lock">
+  <h1>🔒 LOCKED</h1>
+  <p>Sirf khaas dil ke liye 💔</p>
+  <input id="code" type="password" placeholder="Enter Passcode">
+  <button onclick="unlock()">UNLOCK</button>
+</div>
+
+<!-- CARD -->
+<div class="card" id="card">
+  <h1>🐾 Suno na…</h1>
+
+  <img id="gif" src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif">
+
+  <p id="text">Pehle dil sambhalo… phir aage badho ❤️</p>
+  <div class="credit">— Mukaddis Hussain</div>
+
+  <button onclick="playSong()">Song On 🎵</button>
+  <button onclick="nextLine()">Dil Kholo 💖</button>
+</div>
+
+<!-- SURPRISE -->
+<div class="surprise" id="surprise">
+  <h1>💥 ONLY YOU 💥</h1>
+
+  <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif"
+       style="width:260px;border-radius:20px;margin:20px;">
+
+  <p>
+    Tum sirf ek feeling nahi ho,<br>
+    tum meri har dua ka jawab ho ❤️<br><br>
+
+    Main future ke vaade nahi karta,<br>
+    bas itna jaanta hoon…<br><br>
+
+    aaj, kal, aur jab tak dil dhadakta hai,<br>
+    tum meri sabse khoobsurat choice ho 💖
+  </p>
+
+  <p style="margin-top:18px;font-weight:bold;">
+    Forever Yours 🐾<br>— Mukaddis Hussain
+  </p>
+</div>
+
+<audio id="song" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-love.mp3">
+</audio>
+
+<script>
+// 🔑 PASSWORD
+const correctCode = "raxx";
+
+function unlock(){
+  const input=document.getElementById("code");
+  if(input.value===correctCode){
+    document.getElementById("lock").style.display="none";
+    document.getElementById("card").style.display="block";
+  } else {
+    input.classList.add("shake");
+    input.value="";
+    setTimeout(()=>input.classList.remove("shake"),300);
+  }
+}
+
+// ❤️ ROMANTIC LINES + CREDIT
+const lines=[
+ "Tumhari smile dekh ke, meri duniya roshan ho jaaye 😺❤️",
+ "Tum meri aadat nahi, meri zarurat ho 🐾💖",
+ "Mera dil bas tumhare liye dhadakta hai 😽❤️",
+ "Jab tum pass ho, waqt ruk sa jaata hai 🌙💖",
+ "Tum meri khushi ka reason ho 🥰🐾",
+ "Meri har subah tumhare naam se shuru hoti hai 🌸❤️",
+ "Tum meri favourite feeling ho 😻💖",
+ "Har pal tumhare bina adhoora lagta hai 🐾❤️",
+ "Meri duniya tumhare bina kuch bhi nahi 😽💖",
+ "Tum meri sabse khoobsurat choice ho 💖"
+];
+
+const gifs=[
+ "https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif",
+ "https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif",
+ "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif",
+ "https://media.giphy.com/media/l0MYC0LajbaPoEADu/giphy.gif",
+ "https://media.giphy.com/media/VbnUQpnihPSIgIXuZv/giphy.gif",
+ "https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif",
+ "https://media.giphy.com/media/1kU0BzIj4hG6U/giphy.gif",
+ "https://media.giphy.com/media/9J7tdYltWyXIY/giphy.gif",
+ "https://media.giphy.com/media/xT9IgIc0lryrxvqVGM/giphy.gif",
+ "https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"
+];
+
+let i=0;
+const text=document.getElementById("text");
+const gif=document.getElementById("gif");
+const card=document.getElementById("card");
+
+function playSong(){ document.getElementById("song").play(); }
+
+function nextLine(){
+  if(i<lines.length){
+    gif.style.opacity=0;
+    setTimeout(()=>{
+      text.innerHTML=lines[i];
+      if(!document.querySelector(".credit")){ 
+        let c=document.createElement("div");
+        c.className="credit";
+        c.innerHTML="— Mukaddis Hussain";
+        card.appendChild(c);
+      }
+      gif.src=gifs[i];
+      gif.style.opacity=1;
+      i++;
+    },400);
+  } else {
+    showSurprise();
+  }
+}
+
+function showSurprise(){
+  card.style.display="none";
+  const s=document.getElementById("surprise");
+  s.style.display="flex";
+
+  for(let j=0;j<35;j++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="❤️";
+    h.style.left=Math.random()*100+"%";
+    h.style.animationDuration=(4+Math.random()*4)+"s";
+    s.appendChild(h);
+  }
+}
+</script>
+
+</body>
+</html>
